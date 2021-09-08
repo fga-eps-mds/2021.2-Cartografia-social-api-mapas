@@ -3,11 +3,6 @@ import { Document } from 'mongoose';
 
 export type PointDocument = Point & Document;
 
-type Answer = {
-  questionId: string;
-  response: string;
-};
-
 @Schema()
 export class Point {
   @Prop()
