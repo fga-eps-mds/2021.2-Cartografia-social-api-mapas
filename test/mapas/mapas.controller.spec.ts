@@ -1,15 +1,27 @@
+import { getModelToken } from '@nestjs/mongoose';
 import { Test, TestingModule } from '@nestjs/testing';
-import { MapasController } from './mapas.controller';
-import { MapasService } from './mapas.service';
+import { Point } from '../../src/mapas/entities/point.schema';
+import { MapasController } from '../../src/mapas/mapas.controller';
+import { MapasService } from '../../src/mapas/mapas.service';
 
 describe('MapasController', () => {
   let controller: MapasController;
 
-  beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
+  const dynamicModule = (fn: any) => {
+    return Test.createTestingModule({
       controllers: [MapasController],
-      providers: [MapasService],
+      providers: [
+        MapasService,
+        {
+          provide: getModelToken(Point.name),
+          useValue: fn,
+        },
+      ],
     }).compile();
+  };
+
+  beforeEach(async () => {
+    const module: TestingModule = await dynamicModule(jest.fn());
 
     controller = module.get<MapasController>(MapasController);
   });

@@ -1,26 +1,30 @@
 import { Injectable } from '@nestjs/common';
-import { CreateMapaDto } from './dto/create-mapa.dto';
-import { UpdateMapaDto } from './dto/update-mapa.dto';
+import { RpcException } from '@nestjs/microservices';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { CreatePointDto } from './dto/create-point.dto';
+import { Point, PointDocument } from './entities/point.schema';
 
 @Injectable()
 export class MapasService {
-  create(createMapaDto: CreateMapaDto) {
-    return 'This action adds a new mapa';
-  }
+  constructor(
+    @InjectModel(Point.name)
+    private pointModel: Model<PointDocument>,
+  ) {}
 
-  findAll() {
-    return `This action returns all mapas`;
-  }
+  async create(createPointDto: CreatePointDto) {
+    const point = new this.pointModel({
+      title: createPointDto.title,
+      description: createPointDto.description,
+      coordinates: [createPointDto.longitude, createPointDto.latitude],
+    });
 
-  findOne(id: number) {
-    return `This action returns a #${id} mapa`;
-  }
+    try {
+      const result = await point.save();
 
-  update(id: number, updateMapaDto: UpdateMapaDto) {
-    return `This action updates a #${id} mapa`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} mapa`;
+      return result.id;
+    } catch (err) {
+      throw new RpcException(err.message);
+    }
   }
 }
