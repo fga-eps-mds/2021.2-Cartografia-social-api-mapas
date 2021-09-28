@@ -47,7 +47,7 @@ describe('MapasService', () => {
     service = module.get<MapasService>(MapasService);
 
     expect(
-      await service.create({
+      await service.createPoint({
         title: 'teste',
         description: 'teste',
         latitude: 0,
@@ -64,7 +64,7 @@ describe('MapasService', () => {
     service = module.get<MapasService>(MapasService);
 
     try {
-      await service.create({
+      await service.createPoint({
         title: 'teste',
         description: 'teste',
         latitude: 0,

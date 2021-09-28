@@ -44,13 +44,13 @@ describe('MapasController', () => {
 
   it('should createPoint', async () => {
     const module: TestingModule = await dynamicModule({
-      create: () => Promise.resolve('123'),
+      createPoint: () => Promise.resolve('123'),
     });
 
     controller = module.get<MapasController>(MapasController);
 
     expect(
-      await controller.create({
+      await controller.createPoint({
         title: 'teste',
         description: 'teste',
         latitude: 0,

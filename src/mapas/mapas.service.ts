@@ -16,7 +16,7 @@ export class MapasService {
     private areaModel: Model<AreaDocument>,
   ) {}
 
-  async create(createPointDto: CreatePointDto) {
+  async createPoint(createPointDto: CreatePointDto) {
     const point = new this.pointModel({
       title: createPointDto.title,
       description: createPointDto.description,
@@ -37,7 +37,7 @@ export class MapasService {
 
     if (!point)
       throw new MicrosserviceException(
-        'Area não encontrada',
+        'Ponto não encontrada',
         HttpStatus.NOT_FOUND,
       );
 

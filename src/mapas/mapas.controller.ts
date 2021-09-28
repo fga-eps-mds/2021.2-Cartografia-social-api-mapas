@@ -9,8 +9,8 @@ export class MapasController {
   constructor(private readonly mapasService: MapasService) {}
 
   @MessagePattern('createPoint')
-  async create(@Payload() createPointDto: CreatePointDto) {
-    const id = await this.mapasService.create(createPointDto);
+  async createPoint(@Payload() createPointDto: CreatePointDto) {
+    const id = await this.mapasService.createPoint(createPointDto);
     return { id };
   }
 
