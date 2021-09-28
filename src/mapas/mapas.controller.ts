@@ -4,6 +4,7 @@ import { MapasService } from './mapas.service';
 import { CreatePointDto } from './dto/create-point.dto';
 import { CreateAreaDto } from './dto/create-area.dto';
 import { UpdatePointDto } from './dto/update-point.dto';
+import { UpdateAreaDto } from './dto/update-area.dto';
 
 @Controller()
 export class MapasController {
@@ -35,6 +36,12 @@ export class MapasController {
   @MessagePattern('createArea')
   async createArea(@Payload() createAreaDto: CreateAreaDto) {
     const id = await this.mapasService.createArea(createAreaDto);
+    return { id };
+  }
+
+  @MessagePattern('updateArea')
+  async updateArea(@Payload() updateAreaDto: UpdateAreaDto) {
+    const id = await this.mapasService.updateArea(updateAreaDto);
     return { id };
   }
 
