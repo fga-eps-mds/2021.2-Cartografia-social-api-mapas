@@ -4,7 +4,10 @@ import { MapasController } from './mapas.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Point, PointSchema } from './entities/point.schema';
 import { Area, AreaSchema } from './entities/area.schema';
-import { MediaRelation, MediaRelationSchema } from './entities/MediaRelation';
+import {
+  MediaRelation,
+  MediaRelationSchema,
+} from './entities/mediaRelation.schema';
 
 @Module({
   imports: [

@@ -1,6 +1,6 @@
 import { getModelToken } from '@nestjs/mongoose';
 import { Test, TestingModule } from '@nestjs/testing';
-import { MediaRelation } from '../../src/mapas/entities/MediaRelation';
+import { MediaRelation } from '../../src/mapas/entities/mediaRelation.schema';
 import { Area } from '../../src/mapas/entities/area.schema';
 import { Point } from '../../src/mapas/entities/point.schema';
 import { MapasController } from '../../src/mapas/mapas.controller';

@@ -5,7 +5,7 @@ import { MicrosserviceException } from '../../src/commons/exceptions/Microsservi
 import { Area } from '../../src/mapas/entities/area.schema';
 import { Point } from '../../src/mapas/entities/point.schema';
 import { MapasService } from '../../src/mapas/mapas.service';
-import { MediaRelation } from '../../src/mapas/entities/MediaRelation';
+import { MediaRelation } from '../../src/mapas/entities/mediaRelation.schema';
 
 describe('MapasService', () => {
   let service: MapasService;
