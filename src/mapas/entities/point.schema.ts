@@ -12,7 +12,7 @@ export class Point {
   description?: string;
 
   @Prop({ type: String })
-  type = 'point';
+  type = 'Point';
 
   @Prop()
   coordinates: number[];
