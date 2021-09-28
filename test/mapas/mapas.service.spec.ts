@@ -5,6 +5,7 @@ import { MicrosserviceException } from '../../src/commons/exceptions/Microsservi
 import { Area } from '../../src/mapas/entities/area.schema';
 import { Point } from '../../src/mapas/entities/point.schema';
 import { MapasService } from '../../src/mapas/mapas.service';
+import { MediaRelation } from '../../src/mapas/entities/MediaRelation';
 
 describe('MapasService', () => {
   let service: MapasService;
@@ -17,7 +18,11 @@ describe('MapasService', () => {
     };
   }
 
-  const dynamicModule = (fn: any, areaFn: any = jest.fn()) => {
+  const dynamicModule = (
+    fn: any,
+    areaFn: any = jest.fn(),
+    mediaFn: any = jest.fn(),
+  ) => {
     return Test.createTestingModule({
       providers: [
         MapasService,
@@ -28,6 +33,10 @@ describe('MapasService', () => {
         {
           provide: getModelToken(Area.name),
           useValue: areaFn,
+        },
+        {
+          provide: getModelToken(MediaRelation.name),
+          useValue: mediaFn,
         },
       ],
     }).compile();
