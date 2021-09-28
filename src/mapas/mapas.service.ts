@@ -32,6 +32,24 @@ export class MapasService {
     }
   }
 
+  async getPoint(id: string) {
+    const point = await this.pointModel.findById(id);
+
+    if (!point)
+      throw new MicrosserviceException(
+        'Area não encontrada',
+        HttpStatus.NOT_FOUND,
+      );
+
+    return point;
+  }
+
+  async deletePoint(id: string) {
+    const point = await this.getPoint(id);
+
+    return point.delete();
+  }
+
   async createArea(createAreaDto: CreateAreaDto) {
     const coordinates = createAreaDto.coordinates.map((value) => {
       return [value.longitude, value.latitude];

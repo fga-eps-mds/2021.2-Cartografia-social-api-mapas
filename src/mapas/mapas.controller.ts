@@ -14,6 +14,17 @@ export class MapasController {
     return { id };
   }
 
+  @MessagePattern('getPoint')
+  async getPoint(@Payload() id: string) {
+    return this.mapasService.getPoint(id);
+  }
+
+  @MessagePattern('deletePoint')
+  async deletePoint(@Payload() id: string) {
+    await this.mapasService.deletePoint(id);
+    return true;
+  }
+
   @MessagePattern('createArea')
   async createArea(@Payload() createAreaDto: CreateAreaDto) {
     const id = await this.mapasService.createArea(createAreaDto);
@@ -22,7 +33,7 @@ export class MapasController {
 
   @MessagePattern('getArea')
   async getArea(@Payload() id: string) {
-    return await this.mapasService.getArea(id);
+    return this.mapasService.getArea(id);
   }
 
   @MessagePattern('deleteArea')
