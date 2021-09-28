@@ -4,6 +4,7 @@ import { Model } from 'mongoose';
 import { MicrosserviceException } from '../commons/exceptions/MicrosserviceException';
 import { CreateAreaDto } from './dto/create-area.dto';
 import { CreatePointDto } from './dto/create-point.dto';
+import { UpdatePointDto } from './dto/update-point.dto';
 import { Area, AreaDocument } from './entities/area.schema';
 import { Point, PointDocument } from './entities/point.schema';
 
@@ -27,6 +28,27 @@ export class MapasService {
       const result = await point.save();
 
       return result.id;
+    } catch (err) {
+      throw new MicrosserviceException(err.message, HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  async updatePoint(updatePointDto: UpdatePointDto) {
+    const point = await this.getPoint(updatePointDto.id);
+
+    if (!point) {
+      throw new MicrosserviceException(
+        'Ponto não encontrada',
+        HttpStatus.NOT_FOUND,
+      );
+    }
+
+    point.description = updatePointDto.description || point.description;
+    point.title = updatePointDto.title || point.title;
+
+    try {
+      const result = point.save();
+      return (await result).id;
     } catch (err) {
       throw new MicrosserviceException(err.message, HttpStatus.BAD_REQUEST);
     }

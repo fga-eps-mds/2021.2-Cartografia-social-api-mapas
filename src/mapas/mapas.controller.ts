@@ -3,6 +3,7 @@ import { MessagePattern, Payload } from '@nestjs/microservices';
 import { MapasService } from './mapas.service';
 import { CreatePointDto } from './dto/create-point.dto';
 import { CreateAreaDto } from './dto/create-area.dto';
+import { UpdatePointDto } from './dto/update-point.dto';
 
 @Controller()
 export class MapasController {
@@ -11,6 +12,12 @@ export class MapasController {
   @MessagePattern('createPoint')
   async createPoint(@Payload() createPointDto: CreatePointDto) {
     const id = await this.mapasService.createPoint(createPointDto);
+    return { id };
+  }
+
+  @MessagePattern('updatePoint')
+  async updatePoint(@Payload() updatePointDto: UpdatePointDto) {
+    const id = await this.mapasService.updatePoint(updatePointDto);
     return { id };
   }
 
