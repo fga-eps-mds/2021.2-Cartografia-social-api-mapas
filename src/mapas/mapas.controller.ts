@@ -41,7 +41,7 @@ export class MapasController {
   }
 
   @MessagePattern('removeMediaFromPoint')
-  async removeMidiaToPoint(@Payload() mediaRelationDto: MediaRelationDto) {
+  async removeMediaToPoint(@Payload() mediaRelationDto: MediaRelationDto) {
     await this.mapasService.deleteMediaFromPoint(mediaRelationDto);
     return true;
   }
