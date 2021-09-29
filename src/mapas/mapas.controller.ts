@@ -5,6 +5,7 @@ import { CreatePointDto } from './dto/create-point.dto';
 import { CreateAreaDto } from './dto/create-area.dto';
 import { UpdatePointDto } from './dto/update-point.dto';
 import { UpdateAreaDto } from './dto/update-area.dto';
+import { MediaRelationDto } from './dto/media-relation.dto';
 
 @Controller()
 export class MapasController {
@@ -24,12 +25,24 @@ export class MapasController {
 
   @MessagePattern('getPoint')
   async getPoint(@Payload() id: string) {
-    return this.mapasService.getPoint(id);
+    return this.mapasService.getPointWithMidia(id);
   }
 
   @MessagePattern('deletePoint')
   async deletePoint(@Payload() id: string) {
     await this.mapasService.deletePoint(id);
+    return true;
+  }
+
+  @MessagePattern('addMediaToPoint')
+  async addMediaToPoint(@Payload() mediaRelationDto: MediaRelationDto) {
+    await this.mapasService.addMediaToPoint(mediaRelationDto);
+    return true;
+  }
+
+  @MessagePattern('removeMediaFromPoint')
+  async removeMidiaToPoint(@Payload() mediaRelationDto: MediaRelationDto) {
+    await this.mapasService.addMediaToPoint(mediaRelationDto);
     return true;
   }
 
