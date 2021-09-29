@@ -19,3 +19,15 @@ export class Point {
 }
 
 export const PointSchema = SchemaFactory.createForClass(Point);
+
+PointSchema.virtual('id').get(function () {
+  return this._id.toHexString();
+});
+
+PointSchema.set('toJSON', {
+  virtuals: true,
+  transform: function (doc, ret) {
+    delete ret._id;
+    delete ret.__v;
+  },
+});
