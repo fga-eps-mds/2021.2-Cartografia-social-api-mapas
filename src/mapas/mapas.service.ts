@@ -1,7 +1,6 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model, Types } from 'mongoose';
-import { async } from 'rxjs';
+import { Model } from 'mongoose';
 import { MicrosserviceException } from '../commons/exceptions/MicrosserviceException';
 import { CreateAreaDto } from './dto/create-area.dto';
 import { CreatePointDto } from './dto/create-point.dto';

@@ -6,8 +6,7 @@ import { Area } from '../../src/mapas/entities/area.schema';
 import { Point } from '../../src/mapas/entities/point.schema';
 import { MapasService } from '../../src/mapas/mapas.service';
 import { MediaRelation } from '../../src/mapas/entities/mediaRelation.schema';
-import { MediaRelationDto } from 'src/mapas/dto/media-relation.dto';
-import { PointDto } from 'src/mapas/dto/point.dto';
+import { MediaRelationDto } from '../../src/mapas/dto/media-relation.dto';
 
 describe('MapasService', () => {
   let service: MapasService;
