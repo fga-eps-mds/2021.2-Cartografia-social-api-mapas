@@ -155,7 +155,7 @@ export class MapasService {
   }
 
   async updateArea(updateAreaDto: UpdateAreaDto) {
-    const area = await this.getPoint(updateAreaDto.id);
+    const area = await this.getArea(updateAreaDto.id);
 
     if (!area) {
       throw new MicrosserviceException(
