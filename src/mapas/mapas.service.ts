@@ -114,6 +114,15 @@ export class MapasService {
 
   async deletePoint(id: string) {
     const point = await this.getPoint(id);
+    const medias = await this.getMediaList(point);
+
+    const mediaData = new MediaRelationDto();
+    mediaData.locationId = point.id;
+
+    for (const media of medias) {
+      mediaData.mediaId = media.id;
+      await this.deleteMediaFromPoint(mediaData);
+    }
 
     return point.delete();
   }
