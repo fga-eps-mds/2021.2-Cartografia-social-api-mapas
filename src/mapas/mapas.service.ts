@@ -105,7 +105,7 @@ export class MapasService {
 
   async deleteMediaFromPoint(mediaRelationDto: MediaRelationDto) {
     const deletedDocument = await this.mediaRelationModel.findOneAndDelete({
-      pointId: mediaRelationDto.locationId,
+      locationId: mediaRelationDto.locationId,
       mediaId: mediaRelationDto.mediaId,
     });
 

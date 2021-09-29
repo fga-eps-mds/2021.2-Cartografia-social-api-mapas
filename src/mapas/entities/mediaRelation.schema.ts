@@ -9,7 +9,7 @@ export class MediaRelation {
   mediaId: string;
 
   @Prop()
-  locationID: string;
+  locationId: string;
 }
 
 export const MediaRelationSchema = SchemaFactory.createForClass(MediaRelation);
