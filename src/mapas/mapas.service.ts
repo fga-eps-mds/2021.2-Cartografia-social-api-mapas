@@ -103,12 +103,7 @@ export class MapasService {
   }
 
   async deleteMediaFromPoint(mediaRelationDto: MediaRelationDto) {
-    const deletedDocument = await this.mediaRelationModel.findOneAndDelete({
-      locationId: mediaRelationDto.locationId,
-      mediaId: mediaRelationDto.mediaId,
-    });
-
-    return !!deletedDocument;
+    return this.deleteMediaRelation(mediaRelationDto);
   }
 
   async deletePoint(id: string) {
@@ -194,5 +189,14 @@ export class MapasService {
 
   private async getMediaList(object: PointDocument | AreaDocument) {
     return this.mediaRelationModel.find({ id: object.id });
+  }
+
+  private async deleteMediaRelation(mediaRelationDto: MediaRelationDto){
+    const deletedDocument = await this.mediaRelationModel.findOneAndDelete({
+      locationId: mediaRelationDto.locationId,
+      mediaId: mediaRelationDto.mediaId,
+    });
+
+    return !!deletedDocument;
   }
 }
