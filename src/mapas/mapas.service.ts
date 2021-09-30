@@ -86,20 +86,9 @@ export class MapasService {
   }
 
   async addMediaToPoint(mediaRelationDto: MediaRelationDto) {
-    const point = this.getPoint(mediaRelationDto.locationId);
+    const point = await this.getPoint(mediaRelationDto.locationId);
 
-    const mediaRelation = new this.mediaRelationModel({
-      locationId: (await point).id,
-      mediaId: mediaRelationDto.mediaId,
-    });
-
-    try {
-      const result = await mediaRelation.save();
-
-      return result.id;
-    } catch (err) {
-      throw new MicrosserviceException(err.message, HttpStatus.BAD_REQUEST);
-    }
+    return this.addMediaRelation(point, mediaRelationDto);
   }
 
   async deleteMediaFromPoint(mediaRelationDto: MediaRelationDto) {
@@ -189,6 +178,24 @@ export class MapasService {
 
   private async getMediaList(object: PointDocument | AreaDocument) {
     return this.mediaRelationModel.find({ id: object.id });
+  }
+
+  private async addMediaRelation(
+    object: PointDocument | AreaDocument,
+    mediaRelationDto: MediaRelationDto,
+  ) {
+    const mediaRelation = new this.mediaRelationModel({
+      locationId: object.id,
+      mediaId: mediaRelationDto.mediaId,
+    });
+
+    try {
+      const result = await mediaRelation.save();
+
+      return result.id;
+    } catch (err) {
+      throw new MicrosserviceException(err.message, HttpStatus.BAD_REQUEST);
+    }
   }
 
   private async deleteMediaRelation(mediaRelationDto: MediaRelationDto){
