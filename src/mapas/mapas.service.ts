@@ -99,13 +99,7 @@ export class MapasService {
     const point = await this.getPoint(id);
     const medias = await this.getMediaList(point);
 
-    const mediaData = new MediaRelationDto();
-    mediaData.locationId = point.id;
-
-    for (const media of medias) {
-      mediaData.mediaId = media.id;
-      await this.deleteMediaFromPoint(mediaData);
-    }
+    await this.deleteAllMediaFromObject(point.id, medias);
 
     return point.delete();
   }
@@ -198,7 +192,17 @@ export class MapasService {
     }
   }
 
-  private async deleteMediaRelation(mediaRelationDto: MediaRelationDto){
+  private async deleteAllMediaFromObject(id: string, medias: MediaRelation[]) {
+    const mediaData = new MediaRelationDto();
+    mediaData.locationId = id;
+
+    for (const media of medias) {
+      mediaData.mediaId = media.mediaId;
+      await this.deleteMediaFromPoint(mediaData);
+    }
+  }
+
+  private async deleteMediaRelation(mediaRelationDto: MediaRelationDto) {
     const deletedDocument = await this.mediaRelationModel.findOneAndDelete({
       locationId: mediaRelationDto.locationId,
       mediaId: mediaRelationDto.mediaId,
