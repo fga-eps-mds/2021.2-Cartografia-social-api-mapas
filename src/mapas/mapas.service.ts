@@ -2,6 +2,7 @@ import { HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { MicrosserviceException } from '../commons/exceptions/MicrosserviceException';
+import { AreaDto } from './dto/area.dto';
 import { CreateAreaDto } from './dto/create-area.dto';
 import { CreatePointDto } from './dto/create-point.dto';
 import { MediaRelationDto } from './dto/media-relation.dto';
@@ -152,7 +153,7 @@ export class MapasService {
     }
   }
 
-  async getArea(id: string) {
+  private async getArea(id: string) {
     const area = await this.areaModel.findById(id);
 
     if (!area)
@@ -164,8 +165,30 @@ export class MapasService {
     return area;
   }
 
+  async getAreaWithMidia(id: string) {
+    const area = await this.getArea(id);
+
+    const areaDto = AreaDto.convertFromAreaDocument(area);
+    areaDto.medias = await this.getMediaList(area);
+
+    return areaDto;
+  }
+
+  async addMediaToArea(mediaRelationDto: MediaRelationDto) {
+    const area = await this.getArea(mediaRelationDto.locationId);
+
+    return this.addMediaRelation(area, mediaRelationDto);
+  }
+
+  async deleteMediaFromArea(mediaRelationDto: MediaRelationDto) {
+    return this.deleteMediaRelation(mediaRelationDto);
+  }
+
   async deleteArea(id: string) {
     const area = await this.getArea(id);
+    const medias = await this.getMediaList(area);
+
+    await this.deleteAllMediaFromObject(area.id, medias);
 
     return await area.delete();
   }

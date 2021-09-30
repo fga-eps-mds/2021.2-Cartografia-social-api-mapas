@@ -59,7 +59,7 @@ describe('MapasController', () => {
     ).toStrictEqual(id);
   });
 
-  it('should createPoint', async () => {
+  it('should createArea', async () => {
     const module: TestingModule = await dynamicModule({
       createArea: () => Promise.resolve('123'),
     });
@@ -88,7 +88,7 @@ describe('MapasController', () => {
     ).toStrictEqual(id);
   });
 
-  it('should createPoint', async () => {
+  it('should get Area', async () => {
     const response = {
       id: '123',
       title: 'teste',
@@ -110,7 +110,7 @@ describe('MapasController', () => {
     };
 
     const module: TestingModule = await dynamicModule({
-      getArea: () => Promise.resolve(response),
+      getAreaWithMidia: () => Promise.resolve(response),
     });
 
     controller = module.get<MapasController>(MapasController);

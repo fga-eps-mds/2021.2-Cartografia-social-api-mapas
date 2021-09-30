@@ -60,12 +60,24 @@ export class MapasController {
 
   @MessagePattern('getArea')
   async getArea(@Payload() id: string) {
-    return this.mapasService.getArea(id);
+    return this.mapasService.getAreaWithMidia(id);
   }
 
   @MessagePattern('deleteArea')
   async deleteArea(@Payload() id: string) {
     await this.mapasService.deleteArea(id);
+    return true;
+  }
+
+  @MessagePattern('addMediaToArea')
+  async addMediaToArea(@Payload() mediaRelationDto: MediaRelationDto) {
+    await this.mapasService.addMediaToArea(mediaRelationDto);
+    return true;
+  }
+
+  @MessagePattern('removeMediaFromArea')
+  async removeMediaToArea(@Payload() mediaRelationDto: MediaRelationDto) {
+    await this.mapasService.deleteMediaFromArea(mediaRelationDto);
     return true;
   }
 }

@@ -300,7 +300,8 @@ describe('MapasService', () => {
     const response = {
       title: 'teste',
       description: 'teste',
-      id: '123',
+      type: 'Polygon',
+      medias: [],
       coordinates: [
         {
           latitude: 0,
@@ -320,13 +321,19 @@ describe('MapasService', () => {
         },
       ],
     };
-    const module = await dynamicModule(jest.fn(), {
-      findById: () => Promise.resolve(response),
-    });
+    const module = await dynamicModule(
+      jest.fn(),
+      {
+        findById: () => Promise.resolve(response),
+      },
+      {
+        find: () => [],
+      },
+    );
 
     service = module.get<MapasService>(MapasService);
 
-    expect(await service.getArea('123')).toStrictEqual(response);
+    expect(await service.getAreaWithMidia('123')).toEqual(response);
   });
 
   it('should not get area by id', async () => {
@@ -337,7 +344,7 @@ describe('MapasService', () => {
     service = module.get<MapasService>(MapasService);
 
     try {
-      await service.getArea('123');
+      await service.getAreaWithMidia('123');
     } catch (error) {
       expect(error).toBeInstanceOf(MicrosserviceException);
     }
