@@ -7,7 +7,6 @@ export class PointDto {
 
     newPointDto.title = point.title;
     newPointDto.description = point.description;
-    newPointDto.type = point.type;
     newPointDto.coordinates = point.coordinates;
 
     return newPointDto;
@@ -16,8 +15,7 @@ export class PointDto {
   // these values will be initialized from a PointDocument
   title: string;
   description?: string;
-  type: string;
+  type = 'Point';
   coordinates: number[];
-
   medias: MediaRelationDocument[] = []; //initialize as empty list
 }
