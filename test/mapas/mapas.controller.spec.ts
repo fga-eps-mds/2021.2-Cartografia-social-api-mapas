@@ -59,6 +59,78 @@ describe('MapasController', () => {
     ).toStrictEqual(id);
   });
 
+  it('should get Point', async () => {
+    const response = {
+      id: '123',
+      title: 'teste',
+      description: 'teste',
+      medias: [],
+      coordinates: [
+        {
+          latitude: 0,
+          longitude: 0,
+        },
+        {
+          latitude: 1,
+          longitude: 1,
+        },
+        {
+          latitude: 2,
+          longitude: 2,
+        },
+      ],
+    };
+
+    const module: TestingModule = await dynamicModule({
+      getPointWithMidia: () => Promise.resolve(response),
+    });
+
+    controller = module.get<MapasController>(MapasController);
+
+    expect(await controller.getPoint(id.id)).toStrictEqual(response);
+  });
+
+  it('should addMediaToPoint', async () => {
+    const module: TestingModule = await dynamicModule({
+      addMediaToPoint: () => Promise.resolve(),
+    });
+
+    controller = module.get<MapasController>(MapasController);
+
+    expect(
+      await controller.addMediaToPoint({
+        locationId: '123',
+        mediaId: '321',
+      }),
+    ).toStrictEqual(true);
+  });
+
+  it('should updatePoint', async () => {
+    const module: TestingModule = await dynamicModule({
+      updatePoint: () => Promise.resolve('123'),
+    });
+
+    controller = module.get<MapasController>(MapasController);
+
+    expect(
+      await controller.updatePoint({
+        id: '123',
+        title: 'teste',
+        description: 'teste',
+      }),
+    ).toStrictEqual(id);
+  });
+
+  it('should deletePoint', async () => {
+    const module: TestingModule = await dynamicModule({
+      deletePoint: () => Promise.resolve(true),
+    });
+
+    controller = module.get<MapasController>(MapasController);
+
+    expect(await controller.deletePoint(id.id)).toBeTruthy();
+  });
+
   it('should createArea', async () => {
     const module: TestingModule = await dynamicModule({
       createArea: () => Promise.resolve('123'),
@@ -86,6 +158,21 @@ describe('MapasController', () => {
         ],
       }),
     ).toStrictEqual(id);
+  });
+
+  it('should addMediaToArea', async () => {
+    const module: TestingModule = await dynamicModule({
+      addMediaToArea: () => Promise.resolve(),
+    });
+
+    controller = module.get<MapasController>(MapasController);
+
+    expect(
+      await controller.addMediaToArea({
+        locationId: '123',
+        mediaId: '321',
+      }),
+    ).toStrictEqual(true);
   });
 
   it('should get Area', async () => {
@@ -116,6 +203,22 @@ describe('MapasController', () => {
     controller = module.get<MapasController>(MapasController);
 
     expect(await controller.getArea(id.id)).toStrictEqual(response);
+  });
+
+  it('should updateArea', async () => {
+    const module: TestingModule = await dynamicModule({
+      updateArea: () => Promise.resolve('123'),
+    });
+
+    controller = module.get<MapasController>(MapasController);
+
+    expect(
+      await controller.updateArea({
+        id: '123',
+        title: 'teste',
+        description: 'teste',
+      }),
+    ).toStrictEqual(id);
   });
 
   it('should deleteArea', async () => {
