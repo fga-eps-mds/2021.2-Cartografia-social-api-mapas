@@ -2,9 +2,18 @@ import { HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { MicrosserviceException } from '../commons/exceptions/MicrosserviceException';
+import { AreaDto } from './dto/area.dto';
 import { CreateAreaDto } from './dto/create-area.dto';
 import { CreatePointDto } from './dto/create-point.dto';
+import { MediaRelationDto } from './dto/media-relation.dto';
+import { PointDto } from './dto/point.dto';
+import { UpdateAreaDto } from './dto/update-area.dto';
+import { UpdatePointDto } from './dto/update-point.dto';
 import { Area, AreaDocument } from './entities/area.schema';
+import {
+  MediaRelation,
+  MediaRelationDocument,
+} from './entities/mediaRelation.schema';
 import { Point, PointDocument } from './entities/point.schema';
 
 @Injectable()
@@ -14,9 +23,11 @@ export class MapasService {
     private pointModel: Model<PointDocument>,
     @InjectModel(Area.name)
     private areaModel: Model<AreaDocument>,
+    @InjectModel(MediaRelation.name)
+    private mediaRelationModel: Model<MediaRelationDocument>,
   ) {}
 
-  async create(createPointDto: CreatePointDto) {
+  async createPoint(createPointDto: CreatePointDto) {
     const point = new this.pointModel({
       title: createPointDto.title,
       description: createPointDto.description,
@@ -30,6 +41,68 @@ export class MapasService {
     } catch (err) {
       throw new MicrosserviceException(err.message, HttpStatus.BAD_REQUEST);
     }
+  }
+
+  async updatePoint(updatePointDto: UpdatePointDto) {
+    const point = await this.getPoint(updatePointDto.id);
+
+    if (!point) {
+      throw new MicrosserviceException(
+        'Ponto não encontrada',
+        HttpStatus.NOT_FOUND,
+      );
+    }
+
+    point.description = updatePointDto.description || point.description;
+    point.title = updatePointDto.title || point.title;
+
+    try {
+      const result = point.save();
+      return (await result).id;
+    } catch (err) {
+      throw new MicrosserviceException(err.message, HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  private async getPoint(id: string) {
+    const point = await this.pointModel.findById(id);
+
+    if (!point)
+      throw new MicrosserviceException(
+        'Ponto não encontrada',
+        HttpStatus.NOT_FOUND,
+      );
+
+    return point;
+  }
+
+  async getPointWithMidia(id: string) {
+    const point = await this.getPoint(id);
+    const medias = this.getMediaList(point);
+
+    const pointDto = PointDto.convertFromPointDocument(point);
+    pointDto.medias = await medias;
+
+    return pointDto;
+  }
+
+  async addMediaToPoint(mediaRelationDto: MediaRelationDto) {
+    const point = await this.getPoint(mediaRelationDto.locationId);
+
+    return this.addMediaRelation(point, mediaRelationDto);
+  }
+
+  async deleteMediaFromPoint(mediaRelationDto: MediaRelationDto) {
+    return this.deleteMediaRelation(mediaRelationDto);
+  }
+
+  async deletePoint(id: string) {
+    const point = await this.getPoint(id);
+    const medias = await this.getMediaList(point);
+
+    await this.deleteAllMediaFromObject(point.id, medias);
+
+    return point.delete();
   }
 
   async createArea(createAreaDto: CreateAreaDto) {
@@ -59,7 +132,28 @@ export class MapasService {
     }
   }
 
-  async getArea(id: string) {
+  async updateArea(updateAreaDto: UpdateAreaDto) {
+    const area = await this.getArea(updateAreaDto.id);
+
+    if (!area) {
+      throw new MicrosserviceException(
+        'Area não encontrada',
+        HttpStatus.NOT_FOUND,
+      );
+    }
+
+    area.description = updateAreaDto.description || area.description;
+    area.title = updateAreaDto.title || area.title;
+
+    try {
+      const result = area.save();
+      return (await result).id;
+    } catch (err) {
+      throw new MicrosserviceException(err.message, HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  private async getArea(id: string) {
     const area = await this.areaModel.findById(id);
 
     if (!area)
@@ -71,9 +165,72 @@ export class MapasService {
     return area;
   }
 
-  async deleteArea(id: string) {
+  async getAreaWithMidia(id: string) {
     const area = await this.getArea(id);
 
+    const areaDto = AreaDto.convertFromAreaDocument(area);
+    areaDto.medias = await this.getMediaList(area);
+
+    return areaDto;
+  }
+
+  async addMediaToArea(mediaRelationDto: MediaRelationDto) {
+    const area = await this.getArea(mediaRelationDto.locationId);
+
+    return this.addMediaRelation(area, mediaRelationDto);
+  }
+
+  async deleteMediaFromArea(mediaRelationDto: MediaRelationDto) {
+    return this.deleteMediaRelation(mediaRelationDto);
+  }
+
+  async deleteArea(id: string) {
+    const area = await this.getArea(id);
+    const medias = await this.getMediaList(area);
+
+    await this.deleteAllMediaFromObject(area.id, medias);
+
     return await area.delete();
+  }
+
+  private async getMediaList(object: PointDocument | AreaDocument) {
+    return this.mediaRelationModel.find({ id: object.id });
+  }
+
+  private async addMediaRelation(
+    object: PointDocument | AreaDocument,
+    mediaRelationDto: MediaRelationDto,
+  ) {
+    const mediaRelation = new this.mediaRelationModel({
+      locationId: object.id,
+      mediaId: mediaRelationDto.mediaId,
+    });
+
+    try {
+      const result = await mediaRelation.save();
+
+      return result.id;
+    } catch (err) {
+      throw new MicrosserviceException(err.message, HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  private async deleteAllMediaFromObject(id: string, medias: MediaRelation[]) {
+    const mediaData = new MediaRelationDto();
+    mediaData.locationId = id;
+
+    for (const media of medias) {
+      mediaData.mediaId = media.mediaId;
+      await this.deleteMediaFromPoint(mediaData);
+    }
+  }
+
+  private async deleteMediaRelation(mediaRelationDto: MediaRelationDto) {
+    const deletedDocument = await this.mediaRelationModel.findOneAndDelete({
+      locationId: mediaRelationDto.locationId,
+      mediaId: mediaRelationDto.mediaId,
+    });
+
+    return !!deletedDocument;
   }
 }
