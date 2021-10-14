@@ -3,6 +3,8 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { MicrosserviceException } from '../commons/exceptions/MicrosserviceException';
 import { AreaDto } from './dto/area.dto';
+import { CommunityDataDto } from './dto/communityData.dto';
+import { CommunityOperationDto } from './dto/communityOperation.dto';
 import { CreateAreaDto } from './dto/create-area.dto';
 import { CreatePointDto } from './dto/create-point.dto';
 import { MediaRelationDto } from './dto/media-relation.dto';
@@ -10,6 +12,10 @@ import { PointDto } from './dto/point.dto';
 import { UpdateAreaDto } from './dto/update-area.dto';
 import { UpdatePointDto } from './dto/update-point.dto';
 import { Area, AreaDocument } from './entities/area.schema';
+import {
+  CommunityRelation,
+  CommunityRelationDocument,
+} from './entities/communityRelation.schema';
 import {
   MediaRelation,
   MediaRelationDocument,
@@ -25,6 +31,8 @@ export class MapasService {
     private areaModel: Model<AreaDocument>,
     @InjectModel(MediaRelation.name)
     private mediaRelationModel: Model<MediaRelationDocument>,
+    @InjectModel(CommunityRelation.name)
+    private communityRelationModel: Model<CommunityRelationDocument>,
   ) {}
 
   async createPoint(createPointDto: CreatePointDto) {
@@ -101,6 +109,7 @@ export class MapasService {
     const medias = await this.getMediaList(point);
 
     await this.deleteAllMediaFromObject(point.id, medias);
+    await this.deleteCommunityRelation(point.id);
 
     return point.delete();
   }
@@ -189,6 +198,7 @@ export class MapasService {
     const medias = await this.getMediaList(area);
 
     await this.deleteAllMediaFromObject(area.id, medias);
+    await this.deleteCommunityRelation(area.id);
 
     return await area.delete();
   }
@@ -232,5 +242,102 @@ export class MapasService {
     });
 
     return !!deletedDocument;
+  }
+
+  private async getPointOrArea(id: string) {
+    let found: AreaDocument | PointDocument = null;
+
+    try {
+      found = await this.getPoint(id);
+    } catch {
+      try {
+        found = await this.getArea(id);
+      } catch {
+        found = null;
+      }
+    }
+
+    return found;
+  }
+
+  private async getPointOrAreaWithMedia(id: string) {
+    let found: AreaDto | PointDto = null;
+
+    try {
+      found = await this.getPointWithMidia(id);
+    } catch {
+      try {
+        found = await this.getAreaWithMidia(id);
+      } catch {
+        found = null;
+      }
+    }
+
+    return found;
+  }
+
+  private async addCommunityRelation(
+    object: PointDocument | AreaDocument,
+    communityOperationDto: CommunityOperationDto,
+  ) {
+    const communityRelation = new this.communityRelationModel({
+      locationId: object.id,
+      communityId: communityOperationDto.communityId,
+    });
+
+    try {
+      const result = await communityRelation.save();
+
+      return result.id;
+    } catch (err) {
+      throw new MicrosserviceException(err.message, HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  private async deleteCommunityRelation(id: string) {
+    const deletedDocument = await this.communityRelationModel.findOneAndDelete({
+      locationId: id,
+    });
+
+    return !!deletedDocument;
+  }
+
+  async addToCommunity(communityOperationDto: CommunityOperationDto) {
+    const locationObject = await this.getPointOrArea(
+      communityOperationDto.locationId,
+    );
+
+    if (locationObject === null) {
+      throw new MicrosserviceException(
+        'Ponto ou Área não encontrado',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    return this.addCommunityRelation(locationObject, communityOperationDto);
+  }
+
+  async getCommunityData(communityId: string) {
+    const communityDataDto = new CommunityDataDto();
+
+    const relations = await this.communityRelationModel.find({
+      communityId: communityId,
+    });
+
+    for (const relation of relations) {
+      const locationObject = await this.getPointOrAreaWithMedia(
+        relation.communityId,
+      );
+
+      if (locationObject instanceof PointDto) {
+        communityDataDto.points.push(locationObject);
+      }
+
+      if (locationObject instanceof AreaDto) {
+        communityDataDto.areas.push(locationObject);
+      }
+    }
+
+    return communityDataDto;
   }
 }
