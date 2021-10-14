@@ -7,6 +7,8 @@ import { Point } from '../../src/mapas/entities/point.schema';
 import { MapasService } from '../../src/mapas/mapas.service';
 import { MediaRelation } from '../../src/mapas/entities/mediaRelation.schema';
 import { MediaRelationDto } from '../../src/mapas/dto/media-relation.dto';
+import { CommunityOperationDto } from '../../src/mapas/dto/communityOperation.dto';
+import { CommunityRelation } from '../../src/mapas/entities/communityRelation.schema';
 
 describe('MapasService', () => {
   let service: MapasService;
@@ -85,6 +87,7 @@ describe('MapasService', () => {
     fn: any,
     areaFn: any = jest.fn(),
     mediaFn: any = jest.fn(),
+    communityFn: any = jest.fn(),
   ) => {
     return Test.createTestingModule({
       providers: [
@@ -100,6 +103,10 @@ describe('MapasService', () => {
         {
           provide: getModelToken(MediaRelation.name),
           useValue: mediaFn,
+        },
+        {
+          provide: getModelToken(CommunityRelation.name),
+          useValue: communityFn,
         },
       ],
     }).compile();
@@ -234,6 +241,9 @@ describe('MapasService', () => {
       {
         find: () => [],
       },
+      {
+        findOneAndDelete: () => true,
+      },
     );
     service = module.get<MapasService>(MapasService);
 
@@ -248,6 +258,9 @@ describe('MapasService', () => {
       jest.fn(),
       {
         find: () => [{ locationId: '123', mediaId: '123' }],
+        findOneAndDelete: () => true,
+      },
+      {
         findOneAndDelete: () => true,
       },
     );
@@ -477,13 +490,16 @@ describe('MapasService', () => {
       {
         find: () => [],
       },
+      {
+        findOneAndDelete: () => true,
+      },
     );
     service = module.get<MapasService>(MapasService);
 
     expect(await service.deleteArea('321')).toBe(true);
   });
 
-  it('should delete point and media', async () => {
+  it('should delete area and media', async () => {
     const module = await dynamicModule(
       jest.fn(),
       {
@@ -491,6 +507,9 @@ describe('MapasService', () => {
       },
       {
         find: () => [{ locationId: '123', mediaId: '123' }],
+        findOneAndDelete: () => true,
+      },
+      {
         findOneAndDelete: () => true,
       },
     );
