@@ -1,6 +1,5 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { cp } from 'fs';
 import { Model } from 'mongoose';
 import { MicrosserviceException } from '../commons/exceptions/MicrosserviceException';
 import { AreaDto } from './dto/area.dto';
