@@ -7,17 +7,25 @@ import { Point } from '../../src/mapas/entities/point.schema';
 import { MapasService } from '../../src/mapas/mapas.service';
 import { MediaRelation } from '../../src/mapas/entities/mediaRelation.schema';
 import { MediaRelationDto } from '../../src/mapas/dto/media-relation.dto';
-import { CommunityOperationDto } from '../../src/mapas/dto/communityOperation.dto';
 import { CommunityRelation } from '../../src/mapas/entities/communityRelation.schema';
+import { CommunityOperationDto } from 'src/mapas/dto/communityOperation.dto';
 
 describe('MapasService', () => {
   let service: MapasService;
 
-  const defaultPointDto = {
+  const defaultCreatePointDto = {
     title: 'teste',
     description: 'teste',
     latitude: 0,
     longitude: 0,
+  };
+
+  const defaultPointDto = {
+    title: 'teste',
+    description: 'teste',
+    type: 'Point',
+    coordinates: [0, 0],
+    medias: [],
   };
 
   const defaultPoint = {
@@ -64,6 +72,18 @@ describe('MapasService', () => {
     delete: () => true,
   };
 
+  const defaultCommunityOperationDto = <CommunityOperationDto>{
+    locationId: '1',
+    communityId: '1',
+  };
+  const defaultCommunityRelation = { ...defaultCommunityOperationDto };
+
+  const defaultCommunityRelationWithMethods = {
+    ...defaultCommunityRelation,
+    save: () => defaultCommunityRelation,
+    delete: () => true,
+  };
+
   function mockPointModel(dto: any) {
     this.data = dto;
     this.data.id = '123';
@@ -76,6 +96,14 @@ describe('MapasService', () => {
   }
 
   function mockMediaRelationModel(dto: any) {
+    this.data = dto;
+    this.save = () => {
+      this.data.id = 'mock';
+      return this.data;
+    };
+  }
+
+  function mockCommunityRelation(dto: any) {
     this.data = dto;
     this.save = () => {
       this.data.id = 'mock';
@@ -116,7 +144,7 @@ describe('MapasService', () => {
     const module = await dynamicModule(mockPointModel);
     service = module.get<MapasService>(MapasService);
 
-    expect(await service.createPoint(defaultPointDto)).toBe('123');
+    expect(await service.createPoint(defaultCreatePointDto)).toBe('123');
   });
 
   it('should update point with sucess', async () => {
@@ -225,7 +253,7 @@ describe('MapasService', () => {
     service = module.get<MapasService>(MapasService);
 
     try {
-      await service.createPoint(defaultPointDto);
+      await service.createPoint(defaultCreatePointDto);
     } catch (error) {
       expect(error).toBeInstanceOf(MicrosserviceException);
       expect(error.message).toBe('erro');
@@ -516,5 +544,81 @@ describe('MapasService', () => {
     service = module.get<MapasService>(MapasService);
 
     expect(await service.deleteArea('321')).toBe(true);
+  });
+
+  it('should add point to community', async () => {
+    const module = await dynamicModule(
+      {
+        findById: () => {
+          return defaultPointWithMethods;
+        },
+      },
+      jest.fn(),
+      {
+        find: () => {
+          return [];
+        },
+      },
+      mockCommunityRelation,
+    );
+
+    service = module.get<MapasService>(MapasService);
+
+    expect(await service.addToCommunity(defaultCommunityOperationDto)).toEqual(
+      'mock',
+    );
+  });
+
+  it('should fail to add point to community', async () => {
+    const module = await dynamicModule(
+      {
+        findById: () => {
+          return null;
+        },
+      },
+      {
+        findById: () => {
+          return null;
+        },
+      },
+      jest.fn(),
+      mockCommunityRelation,
+    );
+
+    service = module.get<MapasService>(MapasService);
+
+    try {
+      await service.addToCommunity(defaultCommunityRelation);
+    } catch (error) {
+      expect(error).toBeInstanceOf(MicrosserviceException);
+    }
+  });
+
+  it('should get community data', async () => {
+    const module = await dynamicModule(
+      {
+        findById: () => {
+          return defaultPointWithMethods;
+        },
+      },
+      jest.fn(),
+      {
+        find: () => {
+          return [];
+        },
+      },
+      {
+        find: () => {
+          return [defaultCommunityRelationWithMethods];
+        },
+      },
+    );
+
+    service = module.get<MapasService>(MapasService);
+
+    expect(await service.getCommunityData('1')).toEqual({
+      points: [defaultPointDto],
+      areas: [],
+    });
   });
 });
