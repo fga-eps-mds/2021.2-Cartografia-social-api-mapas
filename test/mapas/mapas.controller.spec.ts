@@ -5,6 +5,7 @@ import { Area } from '../../src/mapas/entities/area.schema';
 import { Point } from '../../src/mapas/entities/point.schema';
 import { MapasController } from '../../src/mapas/mapas.controller';
 import { MapasService } from '../../src/mapas/mapas.service';
+import { CommunityDataDto } from 'src/mapas/dto/communityData.dto';
 
 describe('MapasController', () => {
   let controller: MapasController;
@@ -229,5 +230,31 @@ describe('MapasController', () => {
     controller = module.get<MapasController>(MapasController);
 
     expect(await controller.deleteArea(id.id)).toBeTruthy();
+  });
+
+  it('should add point to community', async () => {
+    const module: TestingModule = await dynamicModule({
+      addToCommunity: () => Promise.resolve('123'),
+    });
+
+    controller = module.get<MapasController>(MapasController);
+
+    expect(
+      await controller.addToCommunity({ locationId: '1', communityId: '1' }),
+    ).toStrictEqual('123');
+  });
+
+  it('should get map data from community', async () => {
+    const module: TestingModule = await dynamicModule({
+      getCommunityData: () =>
+        Promise.resolve(<CommunityDataDto>{ points: [], areas: [] }),
+    });
+
+    controller = module.get<MapasController>(MapasController);
+
+    expect(await controller.getCommunityData('123')).toStrictEqual({
+      points: [],
+      areas: [],
+    });
   });
 });
