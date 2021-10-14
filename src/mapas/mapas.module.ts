@@ -8,6 +8,10 @@ import {
   MediaRelation,
   MediaRelationSchema,
 } from './entities/mediaRelation.schema';
+import {
+  CommunityRelation,
+  CommunityRelationSchema,
+} from './entities/communityRelation.schema';
 
 @Module({
   imports: [
@@ -15,6 +19,9 @@ import {
     MongooseModule.forFeature([{ name: Area.name, schema: AreaSchema }]),
     MongooseModule.forFeature([
       { name: MediaRelation.name, schema: MediaRelationSchema },
+    ]),
+    MongooseModule.forFeature([
+      { name: CommunityRelation.name, schema: CommunityRelationSchema },
     ]),
   ],
   controllers: [MapasController],
