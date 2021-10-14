@@ -6,6 +6,7 @@ import { CreateAreaDto } from './dto/create-area.dto';
 import { UpdatePointDto } from './dto/update-point.dto';
 import { UpdateAreaDto } from './dto/update-area.dto';
 import { MediaRelationDto } from './dto/media-relation.dto';
+import { CommunityOperationDto } from './dto/communityOperation.dto';
 
 @Controller()
 export class MapasController {
@@ -79,5 +80,17 @@ export class MapasController {
   async removeMediaToArea(@Payload() mediaRelationDto: MediaRelationDto) {
     await this.mapasService.deleteMediaFromArea(mediaRelationDto);
     return true;
+  }
+
+  @MessagePattern('addToCommunity')
+  async addToCommunity(
+    @Payload() communityOperationDto: CommunityOperationDto,
+  ) {
+    return this.mapasService.addToCommunity(communityOperationDto);
+  }
+
+  @MessagePattern('getCommunityData')
+  async getCommunityData(@Payload('id') communityId: string) {
+    return this.mapasService.getCommunityData(communityId);
   }
 }
