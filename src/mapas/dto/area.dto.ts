@@ -5,6 +5,7 @@ export class AreaDto {
   static convertFromAreaDocument(area: AreaDocument) {
     const newAreaDto = new AreaDto();
 
+    newAreaDto.id = area.id;
     newAreaDto.title = area.title;
     newAreaDto.description = area.description;
     newAreaDto.type = area.type;
@@ -14,6 +15,7 @@ export class AreaDto {
   }
 
   // these values will be initialized from a AreaDocument
+  id: string;
   title: string;
   description?: string;
   type = 'Polygon';
