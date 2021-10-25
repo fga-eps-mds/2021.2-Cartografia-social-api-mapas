@@ -20,6 +20,21 @@ services:
       - .env
     networks:
       - backend
+
+  debug:
+    build:
+      context: .
+      dockerfile: ./dev.Dockerfile
+    volumes: 
+      - .:/var/www/gateway
+    ports: 
+      - 9227:9227
+    command: npm run start:debug
+    hostname: maps
+    env_file:
+      - .env
+    networks:
+      - backend
       
 networks:
   backend:

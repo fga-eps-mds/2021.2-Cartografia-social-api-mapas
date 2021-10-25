@@ -3,3 +3,6 @@ run:
 
 build:
 	docker-compose up --build dev
+
+debug:
+	docker-compose up --build debug
