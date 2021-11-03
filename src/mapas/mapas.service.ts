@@ -21,7 +21,6 @@ import {
   MediaRelationDocument,
 } from './entities/mediaRelation.schema';
 import { Point, PointDocument } from './entities/point.schema';
-import tokml from 'geojson-to-kml';
 
 @Injectable()
 export class MapasService {
@@ -340,25 +339,5 @@ export class MapasService {
     }
 
     return communityDataDto;
-  }
-
-  async exportPointToKml(pointId: string) {
-    const point = await this.getPoint(pointId);
-
-    const kmlPointData = tokml(point, {
-      documentName: `KML-${point.title}`,
-    });
-
-    return kmlPointData;
-  }
-
-  async exportAreaToKml(areaId: string) {
-    const area = await this.getArea(areaId);
-
-    const kmlPointData = tokml(area, {
-      documentName: `KML-${area.title}`,
-    });
-
-    return kmlPointData;
   }
 }

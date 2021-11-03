@@ -93,16 +93,4 @@ export class MapasController {
   async getCommunityData(@Payload('id') communityId: string) {
     return this.mapasService.getCommunityData(communityId);
   }
-
-  @MessagePattern('exportPointToKml')
-  async exportPointToKml(@Payload() pointId: string) {
-    await this.mapasService.exportPointToKml(pointId);
-    return true;
-  }
-
-  @MessagePattern('exportAreaToKml')
-  async exportAreaToKml(@Payload() areaId: string) {
-    await this.mapasService.exportAreaToKml(areaId);
-    return true;
-  }
 }
