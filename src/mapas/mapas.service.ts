@@ -335,4 +335,12 @@ export class MapasService {
 
     return communityDataDto;
   }
+
+  async getMidiaFromPoint(pointid: string) {
+    const relations = await this.mediaRelationModel.find({
+      locationId: pointid,
+    });
+
+    return relations;
+  }
 }

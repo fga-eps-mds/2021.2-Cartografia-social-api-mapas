@@ -93,4 +93,9 @@ export class MapasController {
   async getCommunityData(@Payload() communityId: string) {
     return this.mapasService.getCommunityData(communityId);
   }
+
+  @MessagePattern('getMidiaFromPoint')
+  async getMidiaFromPoint(@Payload() pointId: string) {
+    return this.mapasService.getMidiaFromPoint(pointId);
+  }
 }
