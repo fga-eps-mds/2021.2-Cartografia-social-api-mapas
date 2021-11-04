@@ -175,7 +175,6 @@ export class MapasService {
 
   async getAreaWithMidia(id: string) {
     const area = await this.getArea(id);
-
     const areaDto = AreaDto.convertFromAreaDocument(area);
     areaDto.medias = await this.getMediaList(area);
 
@@ -203,7 +202,7 @@ export class MapasService {
   }
 
   private async getMediaList(object: PointDocument | AreaDocument) {
-    return this.mediaRelationModel.find({ id: object.id });
+    return await this.mediaRelationModel.find({ locationId: object.id });
   }
 
   private async addMediaRelation(
