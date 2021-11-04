@@ -90,7 +90,7 @@ export class MapasController {
   }
 
   @MessagePattern('getCommunityData')
-  async getCommunityData(@Payload('id') communityId: string) {
+  async getCommunityData(@Payload() communityId: string) {
     return this.mapasService.getCommunityData(communityId);
   }
 }

@@ -74,7 +74,6 @@ export class MapasService {
 
   private async getPoint(id: string) {
     const point = await this.pointModel.findById(id);
-
     if (!point)
       throw new MicrosserviceException(
         'Ponto não encontrada',
@@ -272,7 +271,6 @@ export class MapasService {
         found = null;
       }
     }
-
     return found;
   }
 
@@ -323,12 +321,10 @@ export class MapasService {
     const relations = await this.communityRelationModel.find({
       communityId: communityId,
     });
-
     for (const relation of relations) {
       const locationObject = await this.getPointOrAreaWithMedia(
-        relation.communityId,
+        relation.locationId,
       );
-
       if (locationObject instanceof PointDto) {
         communityDataDto.points.push(locationObject);
       }
