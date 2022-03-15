@@ -12,7 +12,7 @@
     "start": "nest start",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
-    "start:prod": "node dist/main",
+    "start:prod": "nest build && node dist/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test": "jest",
     "test:watch": "jest --watch",
@@ -56,7 +56,8 @@
     "ts-loader": "^9.2.3",
     "ts-node": "^10.0.0",
     "tsconfig-paths": "^3.10.1",
-    "typescript": "^4.3.5"
+    "typescript": "^4.3.5",
+    "jest-sonar": "^0.2.12"
   },
   "jest": {
     "moduleFileExtensions": [
@@ -64,6 +65,7 @@
       "json",
       "ts"
     ],
+    "collectCoverage": true,
     "rootDir": "./",
     "testRegex": ".*\\.spec\\.ts$",
     "transform": {
@@ -81,7 +83,19 @@
       "/src/config/configuration.ts",
       "/coverage/"
     ],
+    "testEnvironment": "node",
     "coverageDirectory": "./coverage",
-    "testEnvironment": "node"
+    "reporters": [
+      "default",
+      [
+        "jest-sonar",
+        {
+          "outputDirectory": "coverage",
+          "outputName": "jest-report.xml",
+          "reportedFilePath": "relative",
+          "relativeRootDir": "<rootDir>/../"
+        }
+      ]
+    ]
   }
 }

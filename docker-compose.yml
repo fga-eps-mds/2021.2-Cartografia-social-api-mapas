@@ -13,10 +13,15 @@ services:
       - .env
     networks:
       - backend
-  maps:
+
+  maps-prod:
     build: .
+    volumes: 
+      - .:/var/www/gateway
+      - /var/www/gateway/node_modules
     restart: always
     hostname: maps
+    command: npm run start:prod
     env_file:
       - .env
     networks:
