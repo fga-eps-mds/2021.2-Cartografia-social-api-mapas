@@ -38,6 +38,7 @@ export class MapasService {
   async createPoint(createPointDto: CreatePointDto) {
     const point = new this.pointModel({
       title: createPointDto.title,
+      validated: createPointDto.validated,
       description: createPointDto.description,
       coordinates: [createPointDto.longitude, createPointDto.latitude],
     });
@@ -63,6 +64,7 @@ export class MapasService {
 
     point.description = updatePointDto.description || point.description;
     point.title = updatePointDto.title || point.title;
+    point.validated = updatePointDto.validated || point.validated
 
     try {
       const result = point.save();

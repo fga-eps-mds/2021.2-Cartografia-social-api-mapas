@@ -3,4 +3,5 @@ export class CreatePointDto {
   description?: string;
   latitude: number;
   longitude: number;
+  validated: boolean;
 }

@@ -16,6 +16,9 @@ export class Area {
 
   @Prop()
   coordinates: number[][][];
+
+  @Prop()
+  validated: boolean;
 }
 
 export const AreaSchema = SchemaFactory.createForClass(Area);
