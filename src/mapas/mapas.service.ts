@@ -64,7 +64,7 @@ export class MapasService {
 
     point.description = updatePointDto.description || point.description;
     point.title = updatePointDto.title || point.title;
-    point.validated = updatePointDto.validated || point.validated
+    point.validated = updatePointDto.validated || point.validated;
 
     try {
       const result = point.save();
@@ -131,6 +131,7 @@ export class MapasService {
       title: createAreaDto.title,
       description: createAreaDto.description,
       coordinates: [coordinates],
+      validated: createAreaDto.validated
     });
 
     try {
@@ -154,6 +155,7 @@ export class MapasService {
 
     area.description = updateAreaDto.description || area.description;
     area.title = updateAreaDto.title || area.title;
+    area.validated = updateAreaDto.validated || area.validated;
 
     try {
       const result = area.save();
