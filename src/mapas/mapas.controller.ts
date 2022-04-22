@@ -94,6 +94,18 @@ export class MapasController {
     return this.mapasService.getCommunityData(communityId);
   }
 
+  @MessagePattern('exportPointToKml')
+  async exportPointToKml(@Payload() pointId: string) {
+    await this.mapasService.exportPointToKml(pointId);
+    return true;
+  }
+
+  @MessagePattern('exportAreaToKml')
+  async exportAreaToKml(@Payload() areaId: string) {
+    await this.mapasService.exportAreaToKml(areaId);
+    return true;
+  }
+
   @MessagePattern('getMidiaFromPoint')
   async getMidiaFromPoint(@Payload() pointId: string) {
     return this.mapasService.getMidiaFromPoint(pointId);
