@@ -3,4 +3,5 @@ export class UpdatePointDto {
   title?: string;
   description?: string;
   validated: boolean;
+  member: string;
 }

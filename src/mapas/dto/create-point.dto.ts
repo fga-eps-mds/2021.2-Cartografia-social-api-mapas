@@ -4,4 +4,5 @@ export class CreatePointDto {
   latitude: number;
   longitude: number;
   validated: boolean;
+  member: string;
 }

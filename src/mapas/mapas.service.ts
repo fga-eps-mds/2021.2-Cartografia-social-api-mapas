@@ -39,6 +39,7 @@ export class MapasService {
     const point = new this.pointModel({
       title: createPointDto.title,
       validated: createPointDto.validated,
+      member: createPointDto.member,
       description: createPointDto.description,
       coordinates: [createPointDto.longitude, createPointDto.latitude],
     });
@@ -65,6 +66,7 @@ export class MapasService {
     point.description = updatePointDto.description || point.description;
     point.title = updatePointDto.title || point.title;
     point.validated = updatePointDto.validated || point.validated;
+    point.member = updatePointDto.member || point.member;
 
     try {
       const result = point.save();
@@ -131,7 +133,8 @@ export class MapasService {
       title: createAreaDto.title,
       description: createAreaDto.description,
       coordinates: [coordinates],
-      validated: createAreaDto.validated
+      validated: createAreaDto.validated,
+      member: createAreaDto.member
     });
 
     try {
@@ -156,6 +159,7 @@ export class MapasService {
     area.description = updateAreaDto.description || area.description;
     area.title = updateAreaDto.title || area.title;
     area.validated = updateAreaDto.validated || area.validated;
+    area.member = updateAreaDto.member || area.member;
 
     try {
       const result = area.save();

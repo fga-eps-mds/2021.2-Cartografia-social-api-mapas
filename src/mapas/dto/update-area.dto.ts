@@ -3,4 +3,5 @@ export class UpdateAreaDto {
   title?: string;
   description?: string;
   validated: boolean;
+  member: string;
 }

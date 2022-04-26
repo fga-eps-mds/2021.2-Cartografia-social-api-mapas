@@ -10,6 +10,7 @@ export class PointDto {
     newPointDto.description = point.description;
     newPointDto.coordinates = point.coordinates;
     newPointDto.validated = point.validated;
+    newPointDto.member = point.member;
 
     return newPointDto;
   }
@@ -18,6 +19,7 @@ export class PointDto {
   id: string;
   title: string;
   validated: boolean;
+  member: string;
   description?: string;
   type = 'Point';
   coordinates: number[];

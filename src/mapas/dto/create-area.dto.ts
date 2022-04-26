@@ -3,6 +3,7 @@ export class CreateAreaDto {
   description?: string;
   coordinates: Coordinates[];
   validated: boolean;
+  member: string;
 }
 
 class Coordinates {

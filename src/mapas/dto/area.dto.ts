@@ -11,6 +11,7 @@ export class AreaDto {
     newAreaDto.type = area.type;
     newAreaDto.coordinates = area.coordinates;
     newAreaDto.validated = area.validated;
+    newAreaDto.member = area.member;
 
     return newAreaDto;
   }
@@ -23,4 +24,5 @@ export class AreaDto {
   coordinates: number[][][];
   medias: MediaRelationDocument[] = []; //initialize as empty list
   validated: boolean;
+  member: string;
 }

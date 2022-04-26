@@ -19,6 +19,9 @@ export class Point {
 
   @Prop()
   validated: boolean;
+
+  @Prop()
+  member: string;
 }
 
 export const PointSchema = SchemaFactory.createForClass(Point);
