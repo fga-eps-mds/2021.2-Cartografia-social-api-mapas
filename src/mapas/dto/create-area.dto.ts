@@ -4,6 +4,7 @@ export class CreateAreaDto {
   coordinates: Coordinates[];
   validated: boolean;
   member: string;
+  color: string;
 }
 
 class Coordinates {

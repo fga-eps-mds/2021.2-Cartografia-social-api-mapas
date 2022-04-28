@@ -22,6 +22,9 @@ export class Area {
 
   @Prop()
   member: string;
+
+  @Prop()
+  color: string;
 }
 
 export const AreaSchema = SchemaFactory.createForClass(Area);
