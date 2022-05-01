@@ -4,5 +4,4 @@ export class UpdateAreaDto {
   description?: string;
   validated: boolean;
   member: string;
-  color: string;
 }

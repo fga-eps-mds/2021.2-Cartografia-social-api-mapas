@@ -134,8 +134,7 @@ export class MapasService {
       description: createAreaDto.description,
       coordinates: [coordinates],
       validated: createAreaDto.validated,
-      member: createAreaDto.member,
-      color: createAreaDto.color,
+      member: createAreaDto.member
     });
 
     try {
@@ -161,7 +160,6 @@ export class MapasService {
     area.title = updateAreaDto.title || area.title;
     area.validated = updateAreaDto.validated || area.validated;
     area.member = updateAreaDto.member || area.member;
-    area.color = updateAreaDto.color || area.color;
 
     try {
       const result = area.save();
