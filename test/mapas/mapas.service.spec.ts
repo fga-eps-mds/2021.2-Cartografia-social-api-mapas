@@ -18,6 +18,8 @@ describe('MapasService', () => {
     description: 'teste',
     latitude: 0,
     longitude: 0,
+    validated: false,
+    member: 'memberid',
   };
 
   const defaultPointDto = {
@@ -26,6 +28,8 @@ describe('MapasService', () => {
     type: 'Point',
     coordinates: [0, 0],
     medias: [],
+    validated: false,
+    member: 'memberid',
   };
 
   const defaultPoint = {
@@ -33,6 +37,8 @@ describe('MapasService', () => {
     description: 'teste',
     coordinates: [0, 0],
     type: 'Point',
+    validated: false,
+    member: 'memberid',
   };
 
   const defaultArea = {
@@ -40,6 +46,8 @@ describe('MapasService', () => {
     description: 'teste',
     type: 'Polygon',
     medias: [],
+    validated: false,
+    member: 'memberid',
     coordinates: [
       {
         latitude: 0,
@@ -165,6 +173,8 @@ describe('MapasService', () => {
         id: '123',
         title: 'new title',
         description: 'new description',
+        validated: false,
+        member: 'memberid',
       }),
     ).toBe('123');
   });
@@ -452,6 +462,8 @@ describe('MapasService', () => {
         id: '123',
         title: 'new title',
         description: 'new description',
+        validated: false,
+        member: 'memberid',
       }),
     ).toBe('123');
   });

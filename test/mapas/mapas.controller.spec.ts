@@ -56,6 +56,8 @@ describe('MapasController', () => {
         description: 'teste',
         latitude: 0,
         longitude: 0,
+        validated: false,
+        member: 'memberid',
       }),
     ).toStrictEqual(id);
   });
@@ -118,6 +120,8 @@ describe('MapasController', () => {
         id: '123',
         title: 'teste',
         description: 'teste',
+        validated: false,
+        member: 'memberid',
       }),
     ).toStrictEqual(id);
   });
@@ -143,6 +147,8 @@ describe('MapasController', () => {
       await controller.createArea({
         title: 'teste',
         description: 'teste',
+        validated: false,
+        member: 'memberid',
         coordinates: [
           {
             latitude: 0,
@@ -218,6 +224,8 @@ describe('MapasController', () => {
         id: '123',
         title: 'teste',
         description: 'teste',
+        validated: false,
+        member: 'memberid',
       }),
     ).toStrictEqual(id);
   });

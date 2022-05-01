@@ -134,7 +134,7 @@ export class MapasService {
       description: createAreaDto.description,
       coordinates: [coordinates],
       validated: createAreaDto.validated,
-      member: createAreaDto.member
+      member: createAreaDto.member,
     });
 
     try {
