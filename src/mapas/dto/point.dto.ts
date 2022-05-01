@@ -9,6 +9,8 @@ export class PointDto {
     newPointDto.title = point.title;
     newPointDto.description = point.description;
     newPointDto.coordinates = point.coordinates;
+    newPointDto.validated = point.validated;
+    newPointDto.member = point.member;
 
     return newPointDto;
   }
@@ -16,6 +18,8 @@ export class PointDto {
   // these values will be initialized from a PointDocument
   id: string;
   title: string;
+  validated: boolean;
+  member: string;
   description?: string;
   type = 'Point';
   coordinates: number[];

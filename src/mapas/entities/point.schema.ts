@@ -16,6 +16,12 @@ export class Point {
 
   @Prop()
   coordinates: number[];
+
+  @Prop()
+  validated: boolean;
+
+  @Prop()
+  member: string;
 }
 
 export const PointSchema = SchemaFactory.createForClass(Point);
