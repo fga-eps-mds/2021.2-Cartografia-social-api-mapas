@@ -1,10 +1,10 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 
-export type PointDocument = Point & Document;
+export type AreaDocument = Area & Document;
 
 @Schema()
-export class Point {
+export class Area {
   @Prop()
   title: string;
 
@@ -12,10 +12,10 @@ export class Point {
   description?: string;
 
   @Prop({ type: String })
-  type = 'Point';
+  type = 'Polygon';
 
   @Prop()
-  coordinates: number[];
+  coordinates: number[][][];
 
   @Prop()
   validated: boolean;
@@ -24,13 +24,13 @@ export class Point {
   member: string;
 }
 
-export const PointSchema = SchemaFactory.createForClass(Point);
+export const AreaSchema = SchemaFactory.createForClass(Area);
 
-PointSchema.virtual('id').get(function () {
+AreaSchema.virtual('id').get(function () {
   return this._id.toHexString();
 });
 
-PointSchema.set('toJSON', {
+AreaSchema.set('toJSON', {
   virtuals: true,
   transform: function (doc, ret) {
     delete ret._id;
